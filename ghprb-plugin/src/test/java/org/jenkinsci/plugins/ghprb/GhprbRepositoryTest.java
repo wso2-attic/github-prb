@@ -95,6 +95,7 @@ public class GhprbRepositoryTest {
         mockHeadAndBase();
 
         given(helper.ifOnlyTriggerPhrase()).willReturn(true);
+        given(helper.ifAutoMergePullRequests()).willReturn(true);
 
         pulls.put(1, ghprbPullRequest);
 
@@ -119,6 +120,7 @@ public class GhprbRepositoryTest {
         verifyNoMoreInteractions(ghPullRequest);
 
         verify(helper).ifOnlyTriggerPhrase();
+        verify(helper).ifAutoMergePullRequests();
         verify(helper).getWhiteListTargetBranches();
         verifyNoMoreInteractions(helper);
         verifyNoMoreInteractions(gt);
@@ -148,6 +150,7 @@ public class GhprbRepositoryTest {
         given(ghUser.getEmail()).willReturn("email");
 
         given(helper.ifOnlyTriggerPhrase()).willReturn(false);
+        given(helper.ifAutoMergePullRequests()).willReturn(false);
         given(helper.isWhitelisted(ghUser)).willReturn(true);
 
         // WHEN
@@ -177,6 +180,7 @@ public class GhprbRepositoryTest {
 
         verify(helper, times(1)).isWhitelisted(eq(ghUser));  // Call to Github API
         verify(helper, times(2)).ifOnlyTriggerPhrase();
+        verify(helper, times(2)).ifAutoMergePullRequests();
         verify(helper, times(1)).getBuilds();
         verify(helper, times(2)).getWhiteListTargetBranches();
         verifyNoMoreInteractions(helper);
@@ -215,6 +219,7 @@ public class GhprbRepositoryTest {
         given(ghUser.getLogin()).willReturn("login");
 
         given(helper.ifOnlyTriggerPhrase()).willReturn(false);
+        given(helper.ifAutoMergePullRequests()).willReturn(false);
         given(helper.isWhitelisted(ghUser)).willReturn(true);
 
         // WHEN
@@ -246,6 +251,7 @@ public class GhprbRepositoryTest {
 
         verify(helper, times(1)).isWhitelisted(eq(ghUser));  // Call to Github API
         verify(helper, times(2)).ifOnlyTriggerPhrase();
+        verify(helper, times(2)).ifAutoMergePullRequests();
         verify(helper, times(1)).getBuilds();
         verify(helper, times(2)).getWhiteListTargetBranches();
 
@@ -287,6 +293,7 @@ public class GhprbRepositoryTest {
         given(ghUser.getLogin()).willReturn("login");
 
         given(helper.ifOnlyTriggerPhrase()).willReturn(false);
+        given(helper.ifAutoMergePullRequests()).willReturn(false);
         given(helper.isRetestPhrase(eq("test this please"))).willReturn(true);
         given(helper.isWhitelisted(ghUser)).willReturn(true);
 
@@ -319,6 +326,7 @@ public class GhprbRepositoryTest {
 
         verify(helper, times(2)).isWhitelisted(eq(ghUser));  // Call to Github API
         verify(helper, times(2)).ifOnlyTriggerPhrase();
+        verify(helper, times(2)).ifAutoMergePullRequests();
         verify(helper, times(2)).getBuilds();
         verify(helper, times(2)).getWhiteListTargetBranches();
 

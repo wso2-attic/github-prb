@@ -104,6 +104,10 @@ public class Ghprb {
 		return trigger.getOnlyTriggerPhrase();
 	}
 
+    public boolean ifAutoMergePullRequests() {
+        return trigger.getAutoMergePullRequests();
+    }
+
 	public boolean isWhitelisted(GHUser user){
 		return trigger.getPermitAll()
 			|| whitelisted.contains(user.getLogin())

@@ -11,6 +11,7 @@ import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GHPullRequestMergeResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -209,6 +210,10 @@ public class GhprbRepository {
 	public GHPullRequest getPullRequest(int id) throws IOException{
 		return repo.getPullRequest(id);
 	}
+
+    public GHPullRequestMergeResponse getMergeRequest(int id, String commitMessage) throws IOException{
+        return repo.merge(id, commitMessage);
+    }
 
 	void onIssueCommentHook(IssueComment issueComment) throws IOException {
 		int id = issueComment.getIssue().getNumber();

@@ -5,9 +5,9 @@
     <artifactId>pom</artifactId>
     <version>6</version>
   </parent>
-
+  <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.50-SNAPSHOT</version>
+  <version>1.0.wso2v1</version>
   <name>GitHub API for Java</name>
   <url>http://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>

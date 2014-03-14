@@ -350,6 +350,12 @@ public class GHRepository {
         return new Requester(root).method("POST").to("/repos/" + owner.login + "/" + name + "/forks", GHRepository.class).wrap(root);
     }
 
+    public GHPullRequestMergeResponse merge( int id, String commitMsg ) throws IOException {
+        Requester requester = new Requester(root);
+        GHPullRequestMergeResponse put = requester.with("commit_message", commitMsg ).method("PUT").to("/repos/" + owner.login + "/" + name + "/pulls/" + id + "/merge", GHPullRequestMergeResponse.class);
+        return put;
+    }
+
     /**
      * Forks this repository into an organization.
      *
@@ -713,13 +719,13 @@ public class GHRepository {
     public PagedIterable<GHMilestone> listMilestones(final GHIssueState state) {
         return new PagedIterable<GHMilestone>() {
             public PagedIterator<GHMilestone> iterator() {
-                return new PagedIterator<GHMilestone>(root.retrieve().asIterator(getApiTailUrl("milestones?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHMilestone[].class)) {
-                    @Override
-                    protected void wrapUp(GHMilestone[] page) {
-                        for (GHMilestone c : page)
-                            c.wrap(GHRepository.this);
-                    }
-                };
+            return new PagedIterator<GHMilestone>(root.retrieve().asIterator(getApiTailUrl("milestones?state="+state.toString().toLowerCase(Locale.ENGLISH)), GHMilestone[].class)) {
+                @Override
+                protected void wrapUp(GHMilestone[] page) {
+                    for (GHMilestone c : page)
+                        c.wrap(GHRepository.this);
+                }
+            };
             }
         };
     }

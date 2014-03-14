@@ -7,19 +7,18 @@
   </parent>
 
   <artifactId>github-api</artifactId>
-  <version>1.45-SNAPSHOT</version>
+  <version>1.50</version>
   <packaging>hpi</packaging>
   <name>GitHub API Plugin</name>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/GitHub+API+Plugin</url>
 
   <dependencies>
-    <dependency>
-      <groupId>org.kohsuke</groupId>
-      <artifactId>github-api</artifactId>
-      <version>1.44</version>
-    </dependency>
+      <dependency>
+          <groupId>org.jenkins-ci.plugins</groupId>
+          <artifactId>github-api</artifactId>
+          <version>1.0.wso2v1</version>
+      </dependency>
   </dependencies>
-
   <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
   <repositories>
     <repository>

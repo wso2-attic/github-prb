@@ -5,9 +5,11 @@ import hudson.model.Cause;
 import hudson.model.Result;
 import hudson.model.queue.QueueTaskFuture;
 import hudson.plugins.git.util.BuildData;
+import jenkins.model.Jenkins;
 import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHPullRequestMergeResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -96,6 +98,12 @@ public class GhprbBuilds {
 		} else {
 			state = GHCommitState.FAILURE;
 		}
+        if ( state == GHCommitState.FAILURE )
+        {
+            repo.addComment(c.getPullID(), "Build failed. Pull ID: " + c.getPullID() + "\nGithub : " + build.getDescription() +
+                    "\nJenkins: " + Jenkins.getInstance().getRootUrl() + build.getUrl() );
+        }
+
 		repo.createCommitStatus(build, state, (c.isMerged() ? "Merged build finished." : "Build finished."),c.getPullID() );
 
 		String publishedURL = GhprbTrigger.getDscp().getPublishedURL();
@@ -143,5 +151,40 @@ public class GhprbBuilds {
 				logger.log(Level.SEVERE, "Can't close pull request", ex);
 			}
 		}
+
+        if (state ==GHCommitState.SUCCESS && trigger.getAutoMergePullRequests()) {
+            try{
+                GHPullRequestMergeResponse mergeRequest;
+                int attemptCount = 0;
+                do{
+                    mergeRequest = repo.getMergeRequest(c.getPullID(),
+                        "sucessfully commited the changes" +
+                        "\nTimestamp : " + build.getTime() +
+                        "\n" + Jenkins.getInstance().getRootUrl() + build.getUrl() +
+                        "\n"
+                    );
+
+                    attemptCount++;
+
+                    if(mergeRequest.isMerged()){
+                        logger.log( Level.INFO, "Successfully merged pull request " + c.getPullID() + " SHA: " + mergeRequest.getSha() + ". Message is: " + mergeRequest.getMessage() );
+                        break;
+                    } else {
+                        Thread.sleep(10000);
+                    }
+                }while( attemptCount != 3 );
+
+                if (!mergeRequest.isMerged()) {
+                    logger.log(Level.WARNING, "Could not merge pull request " + c.getPullID() + ". Error is: " + mergeRequest.getMessage());
+                }
+            }
+            /**
+             * Change the exception for catch
+             */
+            catch (Exception ex)
+            {
+                logger.log(Level.SEVERE, "Can't Merge pull request", ex);
+            }
+        }
 	}
 }

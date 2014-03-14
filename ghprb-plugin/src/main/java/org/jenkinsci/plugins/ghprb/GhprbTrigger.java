@@ -53,6 +53,7 @@ public class GhprbTrigger extends Trigger<AbstractProject<?, ?>> {
 	private final Boolean useGitHubHooks;
 	private final Boolean permitAll;
 	private Boolean autoCloseFailedPullRequests;
+    private Boolean autoMergePullRequests;
 	private List<GhprbBranch> whiteListTargetBranches;
 
     transient private Ghprb ml;
@@ -67,6 +68,7 @@ public class GhprbTrigger extends Trigger<AbstractProject<?, ?>> {
                         Boolean useGitHubHooks,
                         Boolean permitAll,
                         Boolean autoCloseFailedPullRequests,
+                        Boolean autoMergePullRequests,
                         List<GhprbBranch> whiteListTargetBranches) throws ANTLRException{
 		super(cron);
 		this.adminlist = adminlist;
@@ -79,6 +81,7 @@ public class GhprbTrigger extends Trigger<AbstractProject<?, ?>> {
 		this.permitAll = permitAll;
 		this.autoCloseFailedPullRequests = autoCloseFailedPullRequests;
 		this.whiteListTargetBranches = whiteListTargetBranches;
+        this.autoMergePullRequests  =autoMergePullRequests;
 	}
 
     @Override
@@ -243,13 +246,18 @@ public class GhprbTrigger extends Trigger<AbstractProject<?, ?>> {
 			return autoCloseFailedPullRequests;
 		}
 	}
-	
-	public List<GhprbBranch> getWhiteListTargetBranches(){
-		if (whiteListTargetBranches == null) {
-			return new ArrayList<GhprbBranch>();
-		}
-		return whiteListTargetBranches;
-	}
+
+    public Boolean getAutoMergePullRequests(){
+        return autoMergePullRequests != null && autoMergePullRequests;
+    }
+
+    public List<GhprbBranch> getWhiteListTargetBranches() {
+
+        if (whiteListTargetBranches == null) {
+            return new ArrayList<GhprbBranch>();
+        }
+        return whiteListTargetBranches;
+    }
 
 	public static GhprbTrigger getTrigger(AbstractProject p){
 		Trigger trigger = p.getTrigger(GhprbTrigger.class);

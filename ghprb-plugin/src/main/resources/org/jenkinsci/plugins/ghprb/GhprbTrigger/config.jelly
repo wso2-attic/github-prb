@@ -18,6 +18,9 @@
 	<f:entry title="${%Close failed pull request automatically?}" field="autoCloseFailedPullRequests">
 	  <f:checkbox default="${descriptor.autoCloseFailedPullRequests}"/>
 	</f:entry>
+	<f:entry title="Merge pull request automatically" field="autoMergePullRequests">
+          <f:checkbox />
+    </f:entry>
 	<f:entry title="${%Crontab line}" field="cron">
 	  <f:textbox default="${descriptor.cron}"/>
 	</f:entry>
